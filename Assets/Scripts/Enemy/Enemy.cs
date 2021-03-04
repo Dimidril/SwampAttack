@@ -8,11 +8,17 @@ public class Enemy : MonoBehaviour
     [SerializeField] private int _helth;
     [SerializeField] private int _reward;
 
-    [SerializeField] private Player _target;
+    private Player _target;
 
     public Player Target => _target;
+    public int Reward => _reward;
 
-    public event UnityAction Dying;
+    public event UnityAction<Enemy> Dying;
+
+    public void Init(Player target)
+    {
+        _target = target;
+    }
 
     public void TakeDamage(int damage)
     {
@@ -26,6 +32,7 @@ public class Enemy : MonoBehaviour
 
     private void Die()
     {
+        Dying?.Invoke(this);
         Destroy(gameObject);
     }
 }

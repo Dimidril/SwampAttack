@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 [RequireComponent(typeof(Animator))]
 public class Player : MonoBehaviour
@@ -14,6 +15,8 @@ public class Player : MonoBehaviour
     private Animator _animator;
     
     public int Money { get; private set; }
+
+    public event UnityAction<int, int> HelthChanged;
  
     private void Start()
     {
@@ -30,11 +33,21 @@ public class Player : MonoBehaviour
         }
     }
 
+    public void AddMobey(int money)
+    {
+        Money += money;
+    }
+
     public void ApplyDamage(int damage)
     {
         _currentHelth -= damage;
+        HelthChanged?.Invoke(_currentHelth, _helth);
+
         if (_currentHelth <= 0)
+        {
             Die();
+            _currentHelth = 0;
+        }
     }
 
     private void Die()
