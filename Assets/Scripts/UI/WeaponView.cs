@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class WeaponView : MonoBehaviour
@@ -13,14 +14,18 @@ public class WeaponView : MonoBehaviour
 
     private Weapon _weapon;
 
+    public event UnityAction<Weapon, WeaponView> SellButtonClick;
+
     private void OnEnable()
     {
         _sellButton.onClick.AddListener(OnSellButtonClick);
+        _sellButton.onClick.AddListener(TryLockItem);
     }
 
     private void OnDisable()
     {
         _sellButton.onClick.RemoveListener(OnSellButtonClick);
+        _sellButton.onClick.RemoveListener(TryLockItem);
     }
 
     public void Render(Weapon weapon)
@@ -32,8 +37,14 @@ public class WeaponView : MonoBehaviour
         _icon.sprite = weapon.Icon;
     }
 
+    private void TryLockItem()
+    {
+        if (_weapon.IsBought)
+            _sellButton.interactable = false;
+    }
+
     private void OnSellButtonClick()
     {
-
+        SellButtonClick?.Invoke(_weapon, this);
     }
 }
