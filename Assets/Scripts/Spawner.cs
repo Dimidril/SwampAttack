@@ -24,7 +24,7 @@ public class Spawner : MonoBehaviour
 
     private void Update()
     {
-        if (_curentWave == null)
+        if (_curentWave == null || _player == null)
             return;
 
         _timeAfterLastSpawn += Time.deltaTime;
@@ -45,8 +45,6 @@ public class Spawner : MonoBehaviour
             _curentWave = null;
         }
     }
-
-
 
     public void NextWave()
     {
